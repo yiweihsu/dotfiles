@@ -1,108 +1,79 @@
 ````markdown
-# My Dotfiles
+# 🛠️ My Dotfiles
 
-Configuration files for macOS, managed via [GNU Stow](https://www.gnu.org/software/stow/).
-Optimized for Web3 development with **Ghostty** and **Zsh**.
+Minimal, fast, and AI-optimized setup for macOS using **Ghostty** + **Zsh**.
 
-## 📂 Structure
+## ⚡️ Quick Setup
 
-```text
-~/dotfiles
-├── ghostty/
-│   └── .config/ghostty/config  # Terminal configuration
-├── zsh/
-│   └── .zshrc                  # Shell configuration
-└── README.md
+### 1. Clone & Install Dependencies
+
+Assumes you have [Homebrew](https://brew.sh) installed.
+
+```bash
+# 1. Clone repo
+git clone [https://github.com/YOUR_USERNAME/dotfiles.git](https://github.com/YOUR_USERNAME/dotfiles.git) ~/dotfiles
+cd ~/dotfiles
+
+# 2. Install EVERYTHING (Tools, Shell, Fonts)
+brew install git stow gh starship zoxide zsh-autosuggestions zsh-syntax-highlighting
+brew install --cask font-jetbrains-mono-nerd-font
 ```
 ````
 
-## 🚀 Quick Start (New Device)
+### 2\. Cleanup & Link (Stow)
 
-### 1\. Install Prerequisites (Homebrew & Git)
-
-If you haven't installed Homebrew yet:
+Move existing configs aside to avoid conflicts, then link the new ones.
 
 ```bash
-/bin/bash -c "$(curl -fsSL [https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh](https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh))"
-```
+# 1. Backup old configs (ignore errors if files don't exist)
+mv ~/.zshrc ~/.zshrc.bak
+mv ~/.config/ghostty/config ~/.config/ghostty/config.bak
+# Remove macOS default ghostty config location if it exists
+rm "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
-Add Homebrew to PATH (if on Apple Silicon):
-
-```bash
-(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/$USER/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-### 2\. Install Core Tools
-
-Install `stow` for management and essential cli tools:
-
-```bash
-brew install git stow gh
-```
-
-### 3\. Clone Repository
-
-Clone this repo to your home directory:
-
-```bash
-git clone [https://github.com/YOUR_USERNAME/dotfiles.git](https://github.com/YOUR_USERNAME/dotfiles.git) ~/dotfiles
+# 2. Link files
 cd ~/dotfiles
-```
-
-### 4\. Apply Configurations (Stow)
-
-This creates symlinks from `~/dotfiles` to your home directory.
-**Note:** Ensure you don't have existing `.zshrc` or ghostty config files, or stow will fail (conflict).
-
-```bash
-# Backup existing zshrc if needed
-# mv ~/.zshrc ~/.zshrc.bak
-
-# Apply configs
 stow zsh
 stow ghostty
 ```
 
-### 5\. Install Shell Dependencies
-
-These tools are required for the `.zshrc` to work correctly:
+### 3\. Finalize
 
 ```bash
-# 1. Install Modern Shell Tools
-brew install starship zoxide
+# Login to GitHub (for Copilot)
+gh auth login
 
-# 2. Install Zsh Plugins (Autosuggestions & Syntax Highlighting)
-brew install zsh-autosuggestions zsh-syntax-highlighting
-
-# 3. Install Fonts (Required for Ghostty/Starship)
-brew install --cask font-jetbrains-mono-nerd-font
-```
-
-### 6\. Finalize
-
-Reload your shell to see changes:
-
-```bash
+# Refresh Shell
 source ~/.zshrc
 ```
 
-## 🛠 Manual Fixes
+---
 
-### Ghostty
+## 🤖 AI Cheatsheet
 
-If Ghostty config isn't loading, check if the default macOS config file is overriding the Stow link:
+### GitHub Copilot (`??`)
 
-```bash
-# Remove the default conflict file if it exists
-rm "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
-```
+Powered by GitHub CLI. Best for general coding questions.
 
-### GitHub Copilot CLI
+| Command  | Usage                 | Description                                |
+| :------- | :-------------------- | :----------------------------------------- |
+| **`??`** | `??`                  | Start interactive AI agent session.        |
+| **`??`** | `?? "kill port 3000"` | Ask a specific question (Suggestion mode). |
 
-To enable the `??` alias, login to GitHub:
+### Codex CLI (`cx`)
 
-```bash
-gh auth login
-gh extension install github/gh-copilot
-```
+Powered by OpenAI/Codex. Best for complex tasks or file manipulation.
+
+| Command   | Usage                    | Description                                            |
+| :-------- | :----------------------- | :----------------------------------------------------- |
+| **`cx`**  | `cx`                     | Enter interactive chat mode.                           |
+| **`cxe`** | `cxe "list large files"` | **Exec**ute a single command (Non-interactive).        |
+| **`cxa`** | `cxa "refactor main.js"` | **Full Auto** mode. Reads/writes files without asking. |
+
+## ⌨️ Shell Shortcuts
+
+| Command     | Description                                               |
+| :---------- | :-------------------------------------------------------- |
+| `z <dir>`   | Smart jump to directory (e.g., `z dot` -\> `~/dotfiles`). |
+| `src`       | Reload `.zshrc`.                                          |
+| `zshconfig` | Open `.zshrc` in editor.                                  |
