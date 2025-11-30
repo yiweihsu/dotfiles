@@ -1,4 +1,3 @@
-````markdown
 # 🛠️ My Dotfiles
 
 Minimal, fast, and AI-optimized setup for macOS using **Ghostty** + **Zsh**.
@@ -18,7 +17,6 @@ cd ~/dotfiles
 brew install git stow gh starship zoxide zsh-autosuggestions zsh-syntax-highlighting
 brew install --cask font-jetbrains-mono-nerd-font
 ```
-````
 
 ### 2\. Cleanup & Link (Stow)
 
