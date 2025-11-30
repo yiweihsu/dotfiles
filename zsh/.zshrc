@@ -91,3 +91,43 @@ alias gp="git push"
 # Enable colors in ls (macOS default ls is monochrome)
 alias ls="ls -G"
 alias ll="ls -Glh"
+
+
+# ==============================================
+# Codex CLI Configuration
+# ==============================================
+
+# Check if 'codex' is installed
+if command -v codex &> /dev/null; then
+
+    # 1. Standard Interactive Mode
+    # Usage: cx "how do I center a div"
+    # This enters the interactive session with your prompt.
+    alias cx='codex'
+
+    # 2. Non-Interactive Execution Mode (The "One-Shot" mode)
+    # Usage: cxe "list all files larger than 100mb"
+    # This uses the 'exec' subcommand to run non-interactively.
+    # It will likely ask for confirmation before running dangerous commands
+    # unless configured otherwise.
+    function cxe() {
+        if [ -z "$1" ]; then
+            echo "Usage: cxe <prompt>"
+        else
+            codex exec "$*"
+        fi
+    }
+
+    # 3. Full Auto Mode (Danger Zone)
+    # Usage: cxa "fix the bug in main.rs"
+    # This uses --full-auto (low-friction, workspace-write access).
+    # Use this when you trust the agent to read/write files without asking every time.
+    function cxa() {
+        if [ -z "$1" ]; then
+            echo "Usage: cxa <prompt>"
+        else
+            echo "⚠️  Running Codex in FULL AUTO mode..."
+            codex --full-auto "$*"
+        fi
+    }
+fi
