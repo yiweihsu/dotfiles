@@ -1,0 +1,64 @@
+# Ghostty Configuration File
+# Save this file to: ~/.config/ghostty/config
+# Reload config while running: Cmd + Shift + ,
+
+# --- Theme & Appearance ---
+# theme = Gruvbox Dark
+# theme = Desert
+
+# Background opacity (0.9 = 90% opacity).
+background-opacity = 0.95
+
+# Blur effect is commented out in your original config, kept it that way.
+# background-blur-radius = 24
+
+# --- Fonts ---
+font-family = JetBrains Mono
+font-size = 14
+font-feature = liga
+font-feature = dlig
+font-thicken = true
+
+# --- Window Behavior ---
+# Unfocused split opacity
+unfocused-split-opacity = 0.65
+
+# Hide title bar and borders
+# You commented these out in your original file, so I kept them commented.
+# If you want the "hacker look", uncomment the lines below:
+# macos-titlebar-style = hidden
+# window-decoration = false
+
+# Internal padding
+window-padding-x = 10
+window-padding-y = 10
+
+# Restore window state
+window-save-state = always
+
+# Enable window shadow (useful for Quake mode visibility)
+macos-window-shadow = true
+
+# --- Quake Mode (Global Hotkey) ---
+# Global hotkey
+keybind = global:opt+space=toggle_quick_terminal
+
+# Quick terminal settings
+quick-terminal-position = top
+
+# [CHANGED] Set to 'mouse' to make it appear on the current active monitor
+quick-terminal-screen = macos-menu-bar
+
+quick-terminal-animation-duration = 0.14
+quick-terminal-autohide = false
+
+# --- Cursor & Mouse ---
+cursor-style = block
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+# --- Clipboard ---
+copy-on-select = true
+
+# --- Miscellaneous ---
+confirm-close-surface = false
