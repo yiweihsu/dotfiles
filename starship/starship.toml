@@ -1,0 +1,52 @@
+# =====================================================
+# Starship prompt config
+# =====================================================
+
+add_newline = false
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$cmd_duration
+$character
+"""
+
+# 不顯示 username（你剛剛問的那個 yiweihsu）
+[username]
+disabled = true
+
+# 主機名稱（可留，也可關）
+[hostname]
+disabled = false
+ssh_only = false
+style = "dimmed"
+
+[directory]
+truncation_length = 3
+style = "bold cyan"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "yellow"
+
+[nodejs]
+symbol = " "
+style = "green"
+
+[python]
+symbol = " "
+style = "yellow"
+
+[cmd_duration]
+min_time = 500
+style = "dimmed"
+
+[character]
+success_symbol = "❯"
+error_symbol = "❯"

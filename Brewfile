@@ -1,8 +1,17 @@
-# === core ===
-brew "git"
-brew "curl"
-brew "wget"
+# =========================
+# Core shell & prompt
+# =========================
+brew "starship"
+brew "zoxide"
 
-# === env managers ===
+# =========================
+# Language managers
+# =========================
 brew "nvm"
 brew "pyenv"
+
+# =========================
+# Zsh UX
+# =========================
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
