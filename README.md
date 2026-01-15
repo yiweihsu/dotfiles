@@ -1,6 +1,6 @@
 # 🛠️ My Dotfiles
 
-Minimal, fast setup for macOS using **Ghostty** + **Zsh** + **Starship**.
+Minimal, fast setup for macOS using **iTerm2** + **Zsh** + **Starship**.
 
 ## ⚡️ Quick Setup
 
@@ -17,23 +17,26 @@ cd ~/dotfiles
 brew bundle install
 ```
 
-### 2. Link Dotfiles (Stow)
-
-Move existing configs aside to avoid conflicts, then link the new ones.
+### 2. Link Dotfiles
 
 ```bash
-# 1. Backup old configs (ignore errors if files don't exist)
+# Backup old configs (ignore errors if files don't exist)
 mv ~/.zshrc ~/.zshrc.bak
 mv ~/.zshenv ~/.zshenv.bak
 mv ~/.zprofile ~/.zprofile.bak
-mv ~/.config/ghostty/config ~/.config/ghostty/config.bak
 mv ~/.config/starship.toml ~/.config/starship.toml.bak
 
-# 2. Link files using stow
-cd ~/dotfiles
-stow zsh
-stow ghostty
-stow starship
+# Link zsh configs
+ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
+ln -s ~/dotfiles/zsh/.zshenv ~/.zshenv
+ln -s ~/dotfiles/zsh/.zprofile ~/.zprofile
+
+# Link starship config
+mkdir -p ~/.config
+ln -s ~/dotfiles/starship/starship.toml ~/.config/starship.toml
+
+# Link iTerm2 preferences
+ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
 ```
 
 ### 3. Finalize
@@ -48,18 +51,22 @@ source ~/.zshrc
 ## 📦 What's Included
 
 ### Shell & Prompt
+
 - **Zsh** - Shell configuration with .zshrc, .zshenv, and .zprofile
 - **Starship** - Fast, customizable prompt
 - **Zoxide** - Smarter cd command
 
 ### Terminal
-- **Ghostty** - Modern, fast terminal emulator
+
+- **iTerm2** - Feature-rich terminal emulator for macOS
 
 ### Development Tools
+
 - **nvm** - Node.js version manager
 - **pyenv** - Python version manager
 
 ### Shell Enhancement
+
 - **zsh-autosuggestions** - Fish-like autosuggestions
 - **zsh-syntax-highlighting** - Real-time syntax highlighting
 
@@ -67,7 +74,7 @@ source ~/.zshrc
 
 ## ⌨️ Shell Shortcuts
 
-| Command     | Description                                               |
-| :---------- | :-------------------------------------------------------- |
-| `z <dir>`   | Smart jump to directory (e.g., `z dot` -> `~/dotfiles`). |
-| `src`       | Reload `.zshrc`.                                          |
+| Command   | Description                                              |
+| :-------- | :------------------------------------------------------- |
+| `z <dir>` | Smart jump to directory (e.g., `z dot` -> `~/dotfiles`). |
+| `src`     | Reload `.zshrc`.                                         |
