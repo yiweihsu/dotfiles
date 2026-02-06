@@ -87,6 +87,23 @@ if command -v zoxide >/dev/null 2>&1; then
   alias cd="z"
 fi
 
+# fzf (fuzzy finder)
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+  export FZF_DEFAULT_OPTS=" \
+    --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+    --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+    --color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+    --color=selected-bg:#45475a \
+    --border='rounded' --prompt=' ' --pointer='' \
+    --separator='─' --scrollbar='│' --info='right'"
+fi
+
+# fastfetch (system info on new terminal)
+if command -v fastfetch >/dev/null 2>&1; then
+  fastfetch --logo small
+fi
+
 # Autosuggestions
 if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -141,8 +158,62 @@ alias gc='git commit -m'
 alias gp='git push'
 alias gl='git pull'
 alias gd='git diff'
+alias gds='git diff --staged'
 alias glog='git log --oneline --graph --decorate'
 
-# ls
-alias ls='ls -G'
-alias ll='ls -Glh'
+# ls (eza)
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza --icons --group-directories-first'
+  alias ll='eza -l --icons --group-directories-first --git --time-style=relative'
+  alias la='eza -la --icons --group-directories-first --git --time-style=relative'
+  alias lt='eza --tree --level=2 --icons --group-directories-first'
+else
+  alias ls='ls -G'
+  alias ll='ls -Glh'
+fi
+
+# bat (syntax-highlighted cat)
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat --paging=never'
+  alias catp='bat'
+  export BAT_THEME="Catppuccin Mocha"
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
+
+# delta (git diff pager)
+if command -v delta >/dev/null 2>&1; then
+  export GIT_PAGER="delta"
+fi
+
+# Added by Antigravity
+export PATH="/Users/yiweihsu/.antigravity/antigravity/bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/yiweihsu/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+export PATH="$HOME/.local/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/yiweihsu/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
