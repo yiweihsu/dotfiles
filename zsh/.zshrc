@@ -99,11 +99,6 @@ if command -v fzf >/dev/null 2>&1; then
     --separator='─' --scrollbar='│' --info='right'"
 fi
 
-# fastfetch (system info on new terminal)
-if command -v fastfetch >/dev/null 2>&1; then
-  fastfetch --logo small
-fi
-
 # Autosuggestions
 if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
