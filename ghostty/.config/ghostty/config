@@ -102,3 +102,4 @@ copy-on-select = true
 confirm-close-surface = false
 
 keybind = cmd+f=write_scrollback_file:open
+keybind = cmd+shift+i=prompt_surface_title
