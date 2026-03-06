@@ -8,7 +8,7 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
 fi
 
 # Editor
-export EDITOR="vim"
+export EDITOR="micro"
 
 # Antigravity
 export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
