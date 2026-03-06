@@ -1,13 +1,4 @@
 # =====================================================
-# 0. Oh My Zsh (Framework)
-# =====================================================
-export ZSH="$HOME/.oh-my-zsh"
-DISABLE_AUTO_UPDATE="true"
-plugins=(git)
-source "$ZSH/oh-my-zsh.sh"
-
-
-# =====================================================
 # 1. Environment & PATH (Early, deterministic)
 # =====================================================
 
@@ -104,6 +95,16 @@ if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; the
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
+# Atuin (shell history — replaces fzf Ctrl+R)
+if command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init zsh)"
+fi
+
+# direnv (per-directory env)
+if command -v direnv >/dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
+fi
+
 # Syntax highlighting (must be last among plugins)
 if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -144,6 +145,11 @@ alias zshconfig='code ~/.zshrc'
 
 # History
 alias history='history 1'
+
+# lazygit
+if command -v lazygit >/dev/null 2>&1; then
+  alias lg='lazygit'
+fi
 
 # Git
 alias g='git'

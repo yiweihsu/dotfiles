@@ -59,7 +59,7 @@ macos-window-shadow = true
 
 # Global hotkey
 
-keybind = global:alt+escape=toggle_quick_terminal
+keybind = global:alt+space=toggle_quick_terminal
 
 # Quick terminal settings
 

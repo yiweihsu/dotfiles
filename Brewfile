@@ -1,4 +1,9 @@
 # =========================
+# Terminal
+# =========================
+cask "ghostty"
+
+# =========================
 # Core shell & prompt
 # =========================
 brew "starship"
@@ -24,3 +29,11 @@ brew "bat"          # cat 替代，語法高亮
 brew "delta"        # git diff 美化
 brew "fzf"          # 模糊搜尋（歷史紀錄、檔案）
 brew "fastfetch"    # 系統資訊顯示
+
+# =========================
+# Productivity tools
+# =========================
+brew "atuin"        # Shell history (replaces fzf Ctrl+R)
+brew "direnv"       # Per-directory env auto-loading
+brew "lazygit"      # TUI git client
+brew "zellij"       # Terminal multiplexer

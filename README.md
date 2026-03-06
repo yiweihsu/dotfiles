@@ -1,6 +1,6 @@
 # 🛠️ My Dotfiles
 
-Minimal, fast setup for macOS using **iTerm2** + **Zsh** + **Starship**.
+Minimal, fast setup for macOS using **Ghostty / iTerm2** + **Zsh** + **Starship**.
 
 ## ⚡️ Quick Setup
 
@@ -35,6 +35,10 @@ ln -s ~/dotfiles/zsh/.zprofile ~/.zprofile
 mkdir -p ~/.config
 ln -s ~/dotfiles/starship/starship.toml ~/.config/starship.toml
 
+# Link Ghostty config
+mkdir -p ~/.config/ghostty
+ln -s ~/dotfiles/ghostty/.config/ghostty/config ~/.config/ghostty/config
+
 # Link iTerm2 preferences
 ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
 ```
@@ -58,7 +62,15 @@ source ~/.zshrc
 
 ### Terminal
 
-- **iTerm2** - Feature-rich terminal emulator for macOS
+- **Ghostty** - GPU-accelerated terminal emulator (primary)
+- **iTerm2** - Feature-rich terminal emulator for macOS (backup)
+
+### Productivity Tools
+
+- **atuin** - Shell history search (replaces fzf Ctrl+R)
+- **direnv** - Per-directory environment auto-loading
+- **lazygit** - TUI git client
+- **zellij** - Terminal multiplexer
 
 ### Development Tools
 
