@@ -6,7 +6,7 @@
 
 # --- Theme & Appearance ---
 
-# theme = Gruvbox Dark
+theme = Material Ocean
 
 # theme = Desert
 
@@ -16,7 +16,7 @@ background-opacity = 0.95
 
 # Blur effect is commented out in your original config, kept it that way.
 
-# background-blur-radius = 24
+background-blur-radius = 24
 
 # --- Fonts ---
 
@@ -25,6 +25,21 @@ font-size = 14
 font-feature = liga
 font-feature = dlig
 font-thicken = true
+
+# --- CJK (繁體中文) ---
+
+# CJK Unified Ideographs
+font-codepoint-map = U+4E00-U+9FFF=Sarasa Mono TC
+# CJK Extension A
+font-codepoint-map = U+3400-U+4DBF=Sarasa Mono TC
+# CJK Compatibility Ideographs
+font-codepoint-map = U+F900-U+FAFF=Sarasa Mono TC
+# Bopomofo (注音)
+font-codepoint-map = U+3100-U+312F=Sarasa Mono TC
+# CJK Symbols and Punctuation (，。、「」等)
+font-codepoint-map = U+3000-U+303F=Sarasa Mono TC
+# Fullwidth Forms (全形英數符號)
+font-codepoint-map = U+FF00-U+FFEF=Sarasa Mono TC
 
 # --- Window Behavior ---
 
@@ -38,7 +53,7 @@ unfocused-split-opacity = 0.65
 
 # If you want the "hacker look", uncomment the lines below:
 
-# macos-titlebar-style = hidden
+macos-titlebar-style = hidden
 
 # window-decoration = false
 
@@ -67,7 +82,7 @@ quick-terminal-position = top
 
 # [CHANGED] Set to 'mouse' to make it appear on the current active monitor
 
-quick-terminal-screen = macos-menu-bar
+quick-terminal-screen = mouse
 
 quick-terminal-animation-duration = 0.14
 quick-terminal-autohide = false
