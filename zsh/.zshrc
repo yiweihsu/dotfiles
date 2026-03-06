@@ -218,3 +218,11 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# =====================================================
+# 7. Welcome Message
+# =====================================================
+
+if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
+  figlet -f slant "YW" | lolcat -f
+fi
