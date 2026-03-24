@@ -103,3 +103,7 @@ confirm-close-surface = false
 
 keybind = cmd+f=write_scrollback_file:open
 keybind = cmd+shift+i=prompt_surface_title
+
+# Fix tab switching when CJK input method is active
+keybind = cmd+shift+physical:left_bracket=previous_tab
+keybind = cmd+shift+physical:right_bracket=next_tab
