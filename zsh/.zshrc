@@ -7,19 +7,28 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+typeset -U path PATH
+path=(
+  "$HOME/bin"
+  "$HOME/.local/bin"
+  "$HOME/.cargo/bin"
+  "$HOME/.foundry/bin"
+  "$HOME/.antigravity/antigravity/bin"
+  $path
+)
+
 # Editor
 export EDITOR="micro"
-
-# Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+export _ZO_DOCTOR=0
 
 
 # =====================================================
 # 2. Zsh Core Behavior & Completion
 # =====================================================
 
+[[ -d "$HOME/.docker/completions" ]] && fpath=("$HOME/.docker/completions" $fpath)
+
 autoload -Uz compinit
-compinit
 
 # Menu selection with arrows
 zstyle ':completion:*' menu select
@@ -32,6 +41,15 @@ zstyle ':completion:*' matcher-list \
 
 # Colored completion (respect LS_COLORS)
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.cache/zsh"
+
+mkdir -p "$HOME/.cache/zsh"
+if [[ -s "$HOME/.zcompdump" ]]; then
+  compinit -C
+else
+  compinit
+fi
 
 # History
 HISTFILE="$HOME/.zsh_history"
@@ -40,6 +58,8 @@ SAVEHIST=50000
 setopt HIST_IGNORE_DUPS
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
 
 
 # =====================================================
@@ -50,17 +70,42 @@ setopt SHARE_HISTORY
 export NVM_DIR="$HOME/.nvm"
 mkdir -p "$NVM_DIR"
 
-if [[ -s /opt/homebrew/opt/nvm/nvm.sh ]]; then
-  source /opt/homebrew/opt/nvm/nvm.sh
-fi
-if [[ -s /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm ]]; then
-  source /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm
-fi
+__load_nvm() {
+  unfunction nvm node npm npx corepack 2>/dev/null
+  [[ -s /opt/homebrew/opt/nvm/nvm.sh ]] && source /opt/homebrew/opt/nvm/nvm.sh
+  [[ -s /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm ]] && source /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm
+}
+nvm() { __load_nvm; nvm "$@"; }
+node() { __load_nvm; command node "$@"; }
+npm() { __load_nvm; command npm "$@"; }
+npx() { __load_nvm; command npx "$@"; }
+corepack() { __load_nvm; command corepack "$@"; }
 
 # ---- pyenv ----
 if command -v pyenv >/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+# ---- conda (lazy load; avoids paying the startup cost on every shell) ----
+__load_conda() {
+  unfunction conda 2>/dev/null
+  local conda_bin="/opt/homebrew/Caskroom/miniconda/base/bin/conda"
+  local conda_sh="/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+  local __conda_setup
+
+  if [[ -x "$conda_bin" ]]; then
+    __conda_setup="$("$conda_bin" shell.zsh hook 2>/dev/null)"
+    if [[ $? -eq 0 ]]; then
+      eval "$__conda_setup"
+    elif [[ -f "$conda_sh" ]]; then
+      source "$conda_sh"
+    else
+      path=("/opt/homebrew/Caskroom/miniconda/base/bin" $path)
+    fi
+    unset __conda_setup
+  fi
+}
+conda() { __load_conda; conda "$@"; }
 
 
 # =====================================================
@@ -80,14 +125,22 @@ fi
 
 # fzf (fuzzy finder)
 if command -v fzf >/dev/null 2>&1; then
+  if command -v fd >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='fd --hidden --strip-cwd-prefix --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type=d --hidden --strip-cwd-prefix --exclude .git'
+  fi
   source <(fzf --zsh)
   export FZF_DEFAULT_OPTS=" \
-    --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
-    --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
-    --color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
-    --color=selected-bg:#45475a \
+    --color=bg+:#1b2b34,bg:#0f111a,spinner:#89ddff,hl:#82aaff \
+    --color=fg:#c5d3e0,header:#89ddff,info:#c792ea,pointer:#89ddff \
+    --color=marker:#c792ea,fg+:#ffffff,prompt:#82aaff,hl+:#ffcb6b \
+    --color=selected-bg:#263238 \
     --border='rounded' --prompt=' ' --pointer='' \
     --separator='─' --scrollbar='│' --info='right'"
+  if command -v bat >/dev/null 2>&1; then
+    export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {} 2>/dev/null || ls -la {}'"
+  fi
 fi
 
 # Autosuggestions
@@ -162,6 +215,41 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias glog='git log --oneline --graph --decorate'
 
+croot() {
+  local root
+  root="$(git rev-parse --show-toplevel 2>/dev/null)" || return 1
+  cd "$root"
+}
+
+take() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: take <dir>"
+    return 1
+  fi
+  mkdir -p "$1" && cd "$1"
+}
+
+ff() {
+  if command -v fd >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
+    fd --hidden --strip-cwd-prefix --exclude .git "${1:-}" |
+      fzf --preview 'bat --color=always --style=numbers --line-range=:200 {} 2>/dev/null || ls -la {}'
+  else
+    echo "ff requires fd and fzf"
+    return 1
+  fi
+}
+
+fcd() {
+  if command -v fd >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
+    local dir
+    dir="$(fd --type=d --hidden --strip-cwd-prefix --exclude .git | fzf)"
+    [[ -n "$dir" ]] && cd "$dir"
+  else
+    echo "fcd requires fd and fzf"
+    return 1
+  fi
+}
+
 # ls (eza)
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza --icons --group-directories-first'
@@ -172,6 +260,10 @@ else
   alias ls='ls -G'
   alias ll='ls -Glh'
 fi
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias c='clear'
 
 # bat (syntax-highlighted cat)
 if command -v bat >/dev/null 2>&1; then
@@ -186,43 +278,58 @@ if command -v delta >/dev/null 2>&1; then
   export GIT_PAGER="delta"
 fi
 
-# Added by Antigravity
-export PATH="/Users/yiweihsu/.antigravity/antigravity/bin:$PATH"
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+if command -v yazi >/dev/null 2>&1; then
+  y() {
+    local tmp
+    tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+    yazi "$@" --cwd-file="$tmp"
+    if [[ -s "$tmp" ]]; then
+      local cwd
+      cwd="$(cat "$tmp")"
+      [[ -n "$cwd" && "$cwd" != "$PWD" ]] && cd "$cwd"
     fi
+    rm -f "$tmp"
+  }
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/yiweihsu/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
-export PATH="$HOME/.local/bin:$PATH"
+if command -v uv >/dev/null 2>&1; then
+  alias uvr='uv run'
+  alias uvs='uv sync'
+fi
+
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+  alias mr='mise run'
+fi
 
 # pnpm
-export PNPM_HOME="/Users/yiweihsu/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+export PNPM_HOME="$HOME/Library/pnpm"
+[[ -d "$PNPM_HOME" ]] && path=("$PNPM_HOME" $path)
 # pnpm end
 
 # =====================================================
-# 7. Welcome Message
+# 7. Welcome / System Snapshot
 # =====================================================
 
-if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
-  figlet -f slant "YW" | lolcat -f
-fi
+splash() {
+  if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
+    figlet -f slant "YW" | lolcat -f
+  fi
+  command -v fastfetch >/dev/null 2>&1 && fastfetch
+}
+
+[[ -n "$YW_SPLASH_ON_START" ]] && splash
+
+# =====================================================
+# 8. Google Cloud SA auth (永不過期)
+# =====================================================
+# SA keys: ~/.config/gcloud/keys/<project>.json (Editor role per project).
+# Default ADC + gcloud account = pokai-ai。用 gcp-* alias 切其他 project。
+# gcp-user 切回 yiwei.hsu@ablauf.io 做 IAM/billing/org-level 操作。
+export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/keys/pokai-ai.json"
+
+alias gcp-pokai='gcloud config set account local-dev@pokai-ai.iam.gserviceaccount.com && gcloud config set project pokai-ai && export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/keys/pokai-ai.json'
+alias gcp-mokuhjem='gcloud config set account local-dev@mokuhjem.iam.gserviceaccount.com && gcloud config set project mokuhjem && export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/keys/mokuhjem.json'
+alias gcp-tools='gcloud config set account local-dev@ablauf-tools.iam.gserviceaccount.com && gcloud config set project ablauf-tools && export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/keys/ablauf-tools.json'
+alias gcp-user='gcloud config set account yiwei.hsu@ablauf.io'
+export PATH="$HOME/bin:$PATH"

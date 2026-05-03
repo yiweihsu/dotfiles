@@ -40,12 +40,15 @@ font-codepoint-map = U+3100-U+312F=Sarasa Mono TC
 font-codepoint-map = U+3000-U+303F=Sarasa Mono TC
 # Fullwidth Forms (全形英數符號)
 font-codepoint-map = U+FF00-U+FFEF=Sarasa Mono TC
+# Emoji
+font-codepoint-map = U+1F000-U+1FAFF=Apple Color Emoji
 
 # --- Window Behavior ---
 
 # Unfocused split opacity
 
 unfocused-split-opacity = 0.65
+split-divider-color = #4b6470
 
 # Hide title bar and borders
 
@@ -61,10 +64,19 @@ macos-titlebar-style = tabs
 
 window-padding-x = 10
 window-padding-y = 10
+window-padding-balance = true
 
 # Restore window state
 
 window-save-state = always
+
+# Shell integration powers prompt jumps, cwd-aware tabs/splits, and SSH terminfo fixes.
+shell-integration-features = ssh-env,ssh-terminfo,path
+
+# Notify when a long command finishes while Ghostty is unfocused.
+notify-on-command-finish = unfocused
+notify-on-command-finish-after = 30s
+notify-on-command-finish-action = notify,no-bell
 
 # Enable window shadow (useful for Quake mode visibility)
 
@@ -91,6 +103,7 @@ quick-terminal-autohide = false
 
 cursor-style = block
 cursor-style-blink = true
+cursor-color = #89ddff
 mouse-hide-while-typing = true
 
 # --- Clipboard ---
@@ -101,8 +114,14 @@ copy-on-select = true
 
 confirm-close-surface = false
 
-keybind = cmd+f=write_scrollback_file:open
+keybind = cmd+shift+p=toggle_command_palette
+keybind = cmd+shift+enter=toggle_split_zoom
+keybind = cmd+shift+f=write_scrollback_file:open
 keybind = cmd+shift+i=prompt_surface_title
+keybind = cmd+up=jump_to_prompt:-1
+keybind = cmd+down=jump_to_prompt:1
+keybind = cmd+ctrl+equal=equalize_splits
+keybind = cmd+shift+r=reload_config
 
 # Fix tab switching when CJK input method is active
 keybind = cmd+shift+physical:left_bracket=previous_tab

@@ -25,6 +25,7 @@ mv ~/.zshrc ~/.zshrc.bak
 mv ~/.zshenv ~/.zshenv.bak
 mv ~/.zprofile ~/.zprofile.bak
 mv ~/.config/starship.toml ~/.config/starship.toml.bak
+mv ~/.config/atuin/config.toml ~/.config/atuin/config.toml.bak
 
 # Link zsh configs
 ln -s ~/dotfiles/zsh/.zshrc ~/.zshrc
@@ -38,6 +39,10 @@ ln -s ~/dotfiles/starship/starship.toml ~/.config/starship.toml
 # Link Ghostty config
 mkdir -p ~/.config/ghostty
 ln -s ~/dotfiles/ghostty/.config/ghostty/config ~/.config/ghostty/config
+
+# Link Atuin config
+mkdir -p ~/.config/atuin
+ln -s ~/dotfiles/atuin/.config/atuin/config.toml ~/.config/atuin/config.toml
 
 # Link iTerm2 preferences
 ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
@@ -70,7 +75,11 @@ source ~/.zshrc
 - **atuin** - Shell history search (replaces fzf Ctrl+R)
 - **direnv** - Per-directory environment auto-loading
 - **lazygit** - TUI git client
-- **zellij** - Terminal multiplexer
+- **uv** - Fast Python project/runtime manager
+- **mise** - Per-project tool versions and task runner
+- **yazi** - Terminal file manager
+- **zellij** - Terminal multiplexer alternative
+- **tmux** - Optional remote / long-running session tool
 
 ### Development Tools
 
@@ -90,3 +99,21 @@ source ~/.zshrc
 | :-------- | :------------------------------------------------------- |
 | `z <dir>` | Smart jump to directory (e.g., `z dot` -> `~/dotfiles`). |
 | `src`     | Reload `.zshrc`.                                         |
+| `croot`   | Jump to the current git repository root.                 |
+| `take x`  | Create a directory and cd into it.                       |
+| `ff`      | Fuzzy-find files with preview.                           |
+| `fcd`     | Fuzzy-find and cd into a directory.                      |
+| `splash`  | Show the YW banner and system snapshot on demand.        |
+| `uvr`     | Shortcut for `uv run` when `uv` is installed.            |
+| `mr`      | Shortcut for `mise run` when `mise` is installed.        |
+
+## Ghostty Workflow
+
+| Shortcut             | Description                                    |
+| :------------------- | :--------------------------------------------- |
+| `Alt+Space`          | Toggle quick terminal.                         |
+| `Cmd+D`              | Split right.                                   |
+| `Cmd+Shift+D`        | Split down.                                    |
+| `Cmd+Shift+Enter`    | Zoom/unzoom the current split.                 |
+| `Cmd+Up` / `Cmd+Down` | Jump between shell prompts in scrollback.     |
+| `Cmd+Shift+P`        | Open Ghostty command palette.                  |

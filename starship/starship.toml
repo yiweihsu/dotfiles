@@ -5,16 +5,16 @@
 add_newline = false
 
 format = """
-[](fg:#89b4fa)\
+[](fg:#89b4fa)\
 $directory\
-[](fg:#89b4fa bg:#a6adc8)\
+[](fg:#89b4fa bg:#a6adc8)\
 $git_branch\
 $git_status\
-[](fg:#a6adc8 bg:#45475a)\
+[](fg:#a6adc8 bg:#45475a)\
 $nodejs$python$rust$golang$docker_context$conda\
-[](fg:#45475a) \
+[](fg:#45475a) \
 $fill\
-$cmd_duration\
+$status$cmd_duration$time\
 $line_break\
 $character"""
 
@@ -27,38 +27,38 @@ truncation_symbol = ".../"
 
 # ── Git ────────────────────────────────────────────
 [git_branch]
-symbol = " "
+symbol = " "
 format = "[ $symbol$branch ]($style)"
 style = "fg:#1e1e2e bg:#a6adc8"
 
 [git_status]
-format = "[$all_status$ahead_behind]($style)"
+format = "[$all_status$ahead_behind ]($style)"
 style = "fg:#1e1e2e bg:#a6adc8"
 
 # ── Languages / Runtimes ──────────────────────────
 [nodejs]
-symbol = " "
+symbol = "Node "
 format = "[ $symbol$version ]($style)"
 style = "fg:#cdd6f4 bg:#45475a"
 detect_files = ["package.json", ".node-version"]
 
 [python]
-symbol = " "
+symbol = "Py "
 format = "[ $symbol$version ]($style)"
 style = "fg:#cdd6f4 bg:#45475a"
 
 [rust]
-symbol = " "
+symbol = "Rust "
 format = "[ $symbol$version ]($style)"
 style = "fg:#cdd6f4 bg:#45475a"
 
 [golang]
-symbol = " "
+symbol = "Go "
 format = "[ $symbol$version ]($style)"
 style = "fg:#cdd6f4 bg:#45475a"
 
 [docker_context]
-symbol = " "
+symbol = "Docker "
 format = "[ $symbol$context ]($style)"
 style = "fg:#cdd6f4 bg:#45475a"
 
@@ -72,8 +72,19 @@ symbol = " "
 
 [cmd_duration]
 min_time = 500
-format = "[ 󰔟 $duration]($style)"
+format = "[ took $duration]($style)"
 style = "fg:#a6adc8"
+
+[status]
+disabled = false
+format = "[ exit:$status]($style)"
+style = "fg:#f38ba8"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+format = "[ $time]($style)"
+style = "fg:#89b4fa"
 
 # ── Input line ─────────────────────────────────────
 [character]
