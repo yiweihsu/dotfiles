@@ -71,7 +71,7 @@ export NVM_DIR="$HOME/.nvm"
 mkdir -p "$NVM_DIR"
 
 __load_nvm() {
-  unfunction nvm node npm npx corepack 2>/dev/null
+  unfunction nvm node npm npx corepack codex 2>/dev/null
   [[ -s /opt/homebrew/opt/nvm/nvm.sh ]] && source /opt/homebrew/opt/nvm/nvm.sh
   [[ -s /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm ]] && source /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm
 }
@@ -80,6 +80,7 @@ node() { __load_nvm; command node "$@"; }
 npm() { __load_nvm; command npm "$@"; }
 npx() { __load_nvm; command npx "$@"; }
 corepack() { __load_nvm; command corepack "$@"; }
+codex() { __load_nvm; command codex "$@"; }
 
 # ---- pyenv ----
 if command -v pyenv >/dev/null 2>&1; then
