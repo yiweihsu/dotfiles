@@ -114,6 +114,10 @@ copy-on-select = true
 
 confirm-close-surface = false
 
+# Prevent accidental Cmd+Q quits; use Cmd+Option+Q when intentionally quitting.
+keybind = cmd+q=ignore
+keybind = cmd+alt+q=quit
+
 keybind = cmd+shift+p=toggle_command_palette
 keybind = cmd+shift+enter=toggle_split_zoom
 keybind = cmd+shift+f=write_scrollback_file:open
