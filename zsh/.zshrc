@@ -14,6 +14,7 @@ path=(
   "$HOME/.cargo/bin"
   "$HOME/.foundry/bin"
   "$HOME/.antigravity/antigravity/bin"
+  "$HOME/.grok/bin"
   $path
 )
 
@@ -27,11 +28,12 @@ export _ZO_DOCTOR=0
 # =====================================================
 
 [[ -d "$HOME/.docker/completions" ]] && fpath=("$HOME/.docker/completions" $fpath)
+[[ -d "$HOME/.grok/completions/zsh" ]] && fpath=("$HOME/.grok/completions/zsh" $fpath)
 
 autoload -Uz compinit
 
-# Menu selection with arrows
-zstyle ':completion:*' menu select
+# fzf-tab provides the interactive completion menu below.
+zstyle ':completion:*' menu no
 
 # Case-insensitive + fuzzy-ish matching
 zstyle ':completion:*' matcher-list \
@@ -120,8 +122,8 @@ fi
 
 # Zoxide (smart cd)
 if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-  alias cd="z"
+  # `cd foo` keeps smart jumping; `cdi` opens the interactive history picker.
+  eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # fzf (fuzzy finder)
@@ -133,14 +135,24 @@ if command -v fzf >/dev/null 2>&1; then
   fi
   source <(fzf --zsh)
   export FZF_DEFAULT_OPTS=" \
-    --color=bg+:#1b2b34,bg:#0f111a,spinner:#89ddff,hl:#82aaff \
-    --color=fg:#c5d3e0,header:#89ddff,info:#c792ea,pointer:#89ddff \
-    --color=marker:#c792ea,fg+:#ffffff,prompt:#82aaff,hl+:#ffcb6b \
-    --color=selected-bg:#263238 \
-    --border='rounded' --prompt=' ' --pointer='' \
+    --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+    --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+    --color=marker:#a6e3a1,fg+:#cdd6f4,prompt:#89b4fa,hl+:#f38ba8 \
+    --color=selected-bg:#45475a,border:#6c7086 \
+    --border='rounded' --prompt='  ' --pointer='❯' --marker='✓' \
     --separator='─' --scrollbar='│' --info='right'"
   if command -v bat >/dev/null 2>&1; then
     export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {} 2>/dev/null || ls -la {}'"
+  fi
+fi
+
+# Turn `cd <Tab>` and other completions into a searchable rounded menu.
+if [[ -f /opt/homebrew/opt/fzf-tab/share/fzf-tab/fzf-tab.zsh ]]; then
+  source /opt/homebrew/opt/fzf-tab/share/fzf-tab/fzf-tab.zsh
+  zstyle ':fzf-tab:*' fzf-flags --height=55% --layout=reverse --border=rounded
+  zstyle ':fzf-tab:*' switch-group '<' '>'
+  if command -v eza >/dev/null 2>&1; then
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -a --tree --level=2 --icons=always --color=always --ignore-glob=".git|node_modules" $realpath'
   fi
 fi
 
@@ -286,7 +298,7 @@ if command -v yazi >/dev/null 2>&1; then
     yazi "$@" --cwd-file="$tmp"
     if [[ -s "$tmp" ]]; then
       local cwd
-      cwd="$(cat "$tmp")"
+      cwd="$(command cat "$tmp")"
       [[ -n "$cwd" && "$cwd" != "$PWD" ]] && cd "$cwd"
     fi
     rm -f "$tmp"
@@ -333,4 +345,3 @@ alias gcp-pokai='gcloud config set account local-dev@pokai-ai.iam.gserviceaccoun
 alias gcp-mokuhjem='gcloud config set account local-dev@mokuhjem.iam.gserviceaccount.com && gcloud config set project mokuhjem && export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/keys/mokuhjem.json'
 alias gcp-tools='gcloud config set account local-dev@ablauf-tools.iam.gserviceaccount.com && gcloud config set project ablauf-tools && export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gcloud/keys/ablauf-tools.json'
 alias gcp-user='gcloud config set account yiwei.hsu@ablauf.io'
-export PATH="$HOME/bin:$PATH"

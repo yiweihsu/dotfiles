@@ -3,3 +3,5 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
 fi
 
 export _ZO_DOCTOR=0
+# Added by Antigravity CLI installer
+export PATH="$HOME/.local/bin:$PATH"

@@ -6,21 +6,18 @@
 
 # --- Theme & Appearance ---
 
-theme = Material Ocean
+theme = Catppuccin Mocha
 
-# theme = Desert
-
-# Background opacity (0.9 = 90% opacity).
-
-background-opacity = 0.95
-
-# Blur effect is commented out in your original config, kept it that way.
-
-background-blur-radius = 24
+# A restrained native-glass look on macOS 26+.
+background-opacity = 0.92
+background-blur = macos-glass-regular
+minimum-contrast = 1.1
 
 # --- Fonts ---
 
-font-family = JetBrains Mono
+font-family = JetBrainsMono Nerd Font Mono
+# Traditional Chinese fallback keeps TC glyph forms and terminal cell widths.
+font-family = Sarasa Mono TC
 font-size = 14
 font-feature = liga
 font-feature = dlig
@@ -47,8 +44,8 @@ font-codepoint-map = U+1F000-U+1FAFF=Apple Color Emoji
 
 # Unfocused split opacity
 
-unfocused-split-opacity = 0.65
-split-divider-color = #4b6470
+unfocused-split-opacity = 0.80
+split-divider-color = #45475a
 
 # Hide title bar and borders
 
@@ -62,20 +59,21 @@ macos-titlebar-style = tabs
 
 # Internal padding
 
-window-padding-x = 10
+window-padding-x = 12
 window-padding-y = 10
 window-padding-balance = true
+window-padding-color = background
 
 # Restore window state
 
 window-save-state = always
 
 # Shell integration powers prompt jumps, cwd-aware tabs/splits, and SSH terminfo fixes.
-shell-integration-features = ssh-env,ssh-terminfo,path
+shell-integration-features = no-cursor,ssh-env,ssh-terminfo,path
 
 # Notify when a long command finishes while Ghostty is unfocused.
 notify-on-command-finish = unfocused
-notify-on-command-finish-after = 30s
+notify-on-command-finish-after = 20s
 notify-on-command-finish-action = notify,no-bell
 
 # Enable window shadow (useful for Quake mode visibility)
@@ -91,20 +89,28 @@ keybind = global:alt+space=toggle_quick_terminal
 # Quick terminal settings
 
 quick-terminal-position = top
+quick-terminal-size = 40%
 
 # [CHANGED] Set to 'mouse' to make it appear on the current active monitor
 
 quick-terminal-screen = mouse
 
 quick-terminal-animation-duration = 0.14
-quick-terminal-autohide = false
+quick-terminal-autohide = true
+quick-terminal-space-behavior = move
 
 # --- Cursor & Mouse ---
 
 cursor-style = block
-cursor-style-blink = true
-cursor-color = #89ddff
+cursor-style-blink = false
+cursor-color = #89dceb
+cursor-opacity = 0.92
+cursor-click-to-move = true
 mouse-hide-while-typing = true
+
+# A smooth, Neovide-like cursor warp. Comment these two lines to disable it.
+custom-shader = ~/dotfiles/ghostty/.config/ghostty/shaders/cursor_warp.glsl
+custom-shader-animation = true
 
 # --- Clipboard ---
 
@@ -112,7 +118,10 @@ copy-on-select = true
 
 # --- Miscellaneous ---
 
-confirm-close-surface = false
+confirm-close-surface = true
+
+# Match the macOS glass treatment in the Dock and app switcher.
+macos-icon = glass
 
 # Prevent accidental Cmd+Q quits; use Cmd+Option+Q when intentionally quitting.
 keybind = cmd+q=ignore

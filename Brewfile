@@ -30,7 +30,8 @@ brew "zsh-syntax-highlighting"
 # =========================
 brew "eza"          # ls 替代，有圖示 + git 狀態
 brew "bat"          # cat 替代，語法高亮
-brew "delta"        # git diff 美化
+brew "git-delta"    # git diff 美化
+brew "fzf-tab"      # searchable Zsh completion menu
 brew "fzf"          # 模糊搜尋（歷史紀錄、檔案）
 brew "fd"           # find 替代
 brew "ripgrep"      # grep 替代
