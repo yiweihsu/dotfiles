@@ -120,8 +120,8 @@ copy-on-select = true
 
 confirm-close-surface = true
 
-# Match the macOS glass treatment in the Dock and app switcher.
-macos-icon = glass
+# Use Ghostty's microchip variant in the Dock and app switcher.
+macos-icon = microchip
 
 # Prevent accidental Cmd+Q quits; use Cmd+Option+Q when intentionally quitting.
 keybind = cmd+q=ignore
