@@ -6,12 +6,32 @@
 
 # --- Theme & Appearance ---
 
-theme = Catppuccin Mocha
+# Graphite Atelier: warm paper, mineral green, restrained ANSI accents.
+background = #191c1d
+foreground = #dedbd3
+selection-background = #394443
+selection-foreground = #f2eee5
+palette = 0=#252a2b
+palette = 1=#cf8b83
+palette = 2=#a5b9a1
+palette = 3=#c8b38a
+palette = 4=#91aabb
+palette = 5=#b3a1b8
+palette = 6=#93b6b0
+palette = 7=#dedbd3
+palette = 8=#808b8b
+palette = 9=#e2a098
+palette = 10=#b8ccb3
+palette = 11=#ddc79f
+palette = 12=#a8c0d1
+palette = 13=#c8b6cd
+palette = 14=#acd0c9
+palette = 15=#f2eee5
 
 # A restrained native-glass look on macOS 26+.
-background-opacity = 0.92
+background-opacity = 0.97
 background-blur = macos-glass-regular
-minimum-contrast = 1.1
+minimum-contrast = 1.2
 
 # --- Fonts ---
 
@@ -21,7 +41,8 @@ font-family = Sarasa Mono TC
 font-size = 14
 font-feature = liga
 font-feature = dlig
-font-thicken = true
+font-thicken = false
+adjust-cell-height = 25%
 
 # --- CJK (繁體中文) ---
 
@@ -45,7 +66,7 @@ font-codepoint-map = U+1F000-U+1FAFF=Apple Color Emoji
 # Unfocused split opacity
 
 unfocused-split-opacity = 0.80
-split-divider-color = #45475a
+split-divider-color = #394443
 
 # Hide title bar and borders
 
@@ -59,8 +80,8 @@ macos-titlebar-style = tabs
 
 # Internal padding
 
-window-padding-x = 12
-window-padding-y = 10
+window-padding-x = 20
+window-padding-y = 16
 window-padding-balance = true
 window-padding-color = background
 
@@ -103,14 +124,12 @@ quick-terminal-space-behavior = move
 
 cursor-style = block
 cursor-style-blink = false
-cursor-color = #89dceb
+cursor-color = #b8ccb3
 cursor-opacity = 0.92
 cursor-click-to-move = true
 mouse-hide-while-typing = true
 
-# A smooth, Neovide-like cursor warp. Comment these two lines to disable it.
-custom-shader = ~/dotfiles/ghostty/.config/ghostty/shaders/cursor_warp.glsl
-custom-shader-animation = true
+# A still cursor keeps the interface calm; the original shader remains on disk.
 
 # --- Clipboard ---
 
@@ -120,8 +139,8 @@ copy-on-select = true
 
 confirm-close-surface = true
 
-# Use Ghostty's microchip variant in the Dock and app switcher.
-macos-icon = microchip
+# Use Ghostty's retro variant in the Dock and app switcher.
+macos-icon = retro
 
 # Prevent accidental Cmd+Q quits; use Cmd+Option+Q when intentionally quitting.
 keybind = cmd+q=ignore
