@@ -1,0 +1,26 @@
+# Graphite Atelier: ported from ~/dotfiles/ghostty/.config/ghostty/config
+name: Graphite Atelier
+accent: '#a5b9a1'
+cursor: '#b8ccb3'
+background: '#191c1d'
+foreground: '#dedbd3'
+details: darker
+terminal_colors:
+  normal:
+    black: '#252a2b'
+    red: '#cf8b83'
+    green: '#a5b9a1'
+    yellow: '#c8b38a'
+    blue: '#91aabb'
+    magenta: '#b3a1b8'
+    cyan: '#93b6b0'
+    white: '#dedbd3'
+  bright:
+    black: '#808b8b'
+    red: '#e2a098'
+    green: '#b8ccb3'
+    yellow: '#ddc79f'
+    blue: '#a8c0d1'
+    magenta: '#c8b6cd'
+    cyan: '#acd0c9'
+    white: '#f2eee5'

@@ -46,6 +46,12 @@ ln -s ~/dotfiles/atuin/.config/atuin/config.toml ~/.config/atuin/config.toml
 
 # Link iTerm2 preferences
 ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
+
+# Link Warp config
+mkdir -p ~/.warp/themes
+ln -s ~/dotfiles/warp/.warp/settings.toml ~/.warp/settings.toml
+ln -s ~/dotfiles/warp/.warp/keybindings.yaml ~/.warp/keybindings.yaml
+ln -s ~/dotfiles/warp/.warp/themes/graphite_atelier.yaml ~/.warp/themes/graphite_atelier.yaml
 ```
 
 ### 3. Finalize
@@ -68,6 +74,7 @@ source ~/.zshrc
 ### Terminal
 
 - **Ghostty** - GPU-accelerated terminal emulator (primary)
+- **Warp** - Agentic terminal, on trial alongside Ghostty; settings, keybindings, and a Graphite Atelier theme
 - **iTerm2** - Feature-rich terminal emulator for macOS (backup)
 
 ### Productivity Tools
