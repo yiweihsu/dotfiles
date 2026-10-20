@@ -14,8 +14,7 @@ path=(
   "$HOME/.cargo/bin"
   "$HOME/.foundry/bin"
   "$HOME/.antigravity/antigravity/bin"
-  "$HOME/.grok/bin"
-  $path
+  ${path:#$HOME/.grok/bin}
 )
 
 # Editor
@@ -73,16 +72,20 @@ export NVM_DIR="$HOME/.nvm"
 mkdir -p "$NVM_DIR"
 
 __load_nvm() {
-  unfunction nvm node npm npx corepack codex 2>/dev/null
+  unfunction nvm node npm npx corepack 2>/dev/null
   [[ -s /opt/homebrew/opt/nvm/nvm.sh ]] && source /opt/homebrew/opt/nvm/nvm.sh
-  [[ -s /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm ]] && source /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm
+  # Only when compinit has run; agent shell snapshots copy compdef without _comps.
+  (( ${+_comps} )) && [[ -s /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm ]] && source /opt/homebrew/opt/nvm/etc/bash_completion.d/nvm
+  typeset -g __nvm_loaded=1
 }
 nvm() { __load_nvm; nvm "$@"; }
 node() { __load_nvm; command node "$@"; }
 npm() { __load_nvm; command npm "$@"; }
 npx() { __load_nvm; command npx "$@"; }
 corepack() { __load_nvm; command corepack "$@"; }
-codex() { __load_nvm; command codex "$@"; }
+codex() {
+  "$HOME/.local/bin/codex" "$@"
+}
 
 # ---- pyenv ----
 if command -v pyenv >/dev/null 2>&1; then
@@ -321,20 +324,7 @@ export PNPM_HOME="$HOME/Library/pnpm"
 # pnpm end
 
 # =====================================================
-# 7. Welcome / System Snapshot
-# =====================================================
-
-splash() {
-  if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
-    figlet -f slant "YW" | lolcat -f
-  fi
-  command -v fastfetch >/dev/null 2>&1 && fastfetch
-}
-
-[[ -n "$YW_SPLASH_ON_START" ]] && splash
-
-# =====================================================
-# 8. Google Cloud SA auth (永不過期)
+# 7. Google Cloud SA auth (永不過期)
 # =====================================================
 # SA keys: ~/.config/gcloud/keys/<project>.json (Editor role per project).
 # Default ADC + gcloud account = pokai-ai。用 gcp-* alias 切其他 project。
