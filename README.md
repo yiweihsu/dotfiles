@@ -1,6 +1,9 @@
 # 🛠️ My Dotfiles
 
-Minimal, fast setup for macOS using **Ghostty / iTerm2** + **Zsh** + **Starship**.
+Minimal, fast setup for macOS using **Ghostty** + **Zsh** + **Starship**, with one palette shared by
+Ghostty, Claude Code and Codex.
+
+![Ube Milk and Matcha Latte themes](docs/screenshots/themes-preview.png)
 
 ## ⚡️ Quick Setup
 
@@ -44,8 +47,22 @@ ln -s ~/dotfiles/ghostty/.config/ghostty/config ~/.config/ghostty/config
 mkdir -p ~/.config/atuin
 ln -s ~/dotfiles/atuin/.config/atuin/config.toml ~/.config/atuin/config.toml
 
+# Link tmux config
+mkdir -p ~/.config/tmux
+ln -s ~/dotfiles/tmux/.config/tmux/tmux.conf ~/.config/tmux/tmux.conf
+
+# Theme switcher (see "Themes" below)
+mkdir -p ~/.local/bin
+ln -s ~/dotfiles/ghostty/design-system/palettes.py ~/.local/bin/term-theme
+
 # Link iTerm2 preferences
 ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.googlecode.iterm2.plist
+```
+
+Claude Code status line: point `statusLine` in `~/.claude/settings.json` at the script.
+
+```json
+"statusLine": { "type": "command", "command": "/bin/bash ~/dotfiles/claude/statusline-atelier.sh" }
 ```
 
 ### 3. Finalize
@@ -53,7 +70,49 @@ ln -s ~/dotfiles/iterm2/com.googlecode.iterm2.plist ~/Library/Preferences/com.go
 ```bash
 # Refresh Shell
 source ~/.zshrc
+
+# Apply the terminal theme to Ghostty, Claude Code and Codex
+term-theme apply ube-milk
 ```
+
+---
+
+## 🎨 Themes
+
+Two finished light themes, each generated from one palette in
+[`ghostty/design-system/palettes.py`](ghostty/design-system/palettes.py):
+
+| Theme | Slug | Canvas | Ink | Brand | Accents |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| **Ube Milk** (default) | `ube-milk` | `#f3ecff` | `#2a2238` | ube `#6b3fc4` | `#aa77ff` cursor, 裏柳 green for success |
+| **Matcha Latte** | `matcha-latte` | `#f1f2e1` | `#272c1b` | 苔 moss `#576313` | 柳染 `#91ad70` cursor, 松葉 green for success |
+
+Matcha Latte running Codex in Ghostty:
+
+![Matcha Latte with Codex](docs/screenshots/matcha-latte-codex.png)
+
+```bash
+term-theme list                    # themes; * marks the active one, drafts are labelled
+term-theme preview ube-milk matcha-latte   # palette cards as a PNG, no terminal windows
+term-theme apply matcha-latte --dry-run    # show the diff only
+term-theme apply matcha-latte      # switch Ghostty, Claude Code and Codex together
+term-theme check                   # WCAG contrast report
+```
+
+How it works:
+
+- One palette produces the Ghostty colors (inside the marked theme block of the Ghostty config),
+  a Claude Code custom theme (`~/.claude/themes/<slug>.json`), and sets Codex to `base16-256`
+  so its syntax colors follow the Ghostty ANSI palette.
+- Every text color is checked at **4.5:1 or better** against the canvas, message, diff and
+  selection backgrounds; `apply` refuses a theme that fails.
+- `apply` backs up all three configs to `~/.local/state/ghostty-themes/`, validates the Ghostty
+  config (restoring on failure), reloads Ghostty and reads the result back.
+- Light themes turn off macOS glass: in Ghostty 1.3.1, glass combined with `minimum-contrast`
+  can turn dark text white.
+- The Claude Code status line, Starship and tmux use ANSI color slots, so they follow whichever
+  theme is active.
+- Already running sessions keep their old colors: use `/theme` in Claude Code, restart Codex.
 
 ---
 
