@@ -1,0 +1,28 @@
+# Slow Sky / generated from design-system/build.py
+# Background L=.962; ink L=.30/.43/.46; accents L=.44.
+background = #e5f6fe
+foreground = #213038
+selection-background = #bfd9e6
+selection-foreground = #213038
+cursor-color = #78431b
+cursor-text = #e5f6fe
+split-divider-color = #748a95
+# Contrast is checked offline; avoid glass/min-contrast interaction in 1.3.1.
+minimum-contrast = 1
+faint-opacity = 1
+palette = 0=#213038
+palette = 1=#883327
+palette = 2=#325f34
+palette = 3=#6e4b10
+palette = 4=#09597d
+palette = 5=#66436e
+palette = 6=#165f58
+palette = 7=#d6eaf4
+palette = 8=#4a5b63
+palette = 9=#883327
+palette = 10=#325f34
+palette = 11=#6e4b10
+palette = 12=#09597d
+palette = 13=#66436e
+palette = 14=#165f58
+palette = 15=#e5f6fe

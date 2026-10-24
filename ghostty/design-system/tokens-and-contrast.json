@@ -1,0 +1,756 @@
+[
+  {
+    "name": "Slow Sky",
+    "tokens": {
+      "canvas": "#e5f6fe",
+      "surface": "#d6eaf4",
+      "selection": "#bfd9e6",
+      "text": "#213038",
+      "secondary": "#41535c",
+      "muted": "#4a5b63",
+      "border": "#748a95",
+      "blue": "#09597d",
+      "green": "#325f34",
+      "amber": "#6e4b10",
+      "red": "#883327",
+      "purple": "#66436e",
+      "teal": "#165f58",
+      "accent": "#78431b",
+      "addedBg": "#d8edd8",
+      "removedBg": "#fdded9",
+      "addedWord": "#bddabd",
+      "removedWord": "#f0c6be"
+    },
+    "checks": [
+      {
+        "fg": "text",
+        "bg": "canvas",
+        "ratio": 12.266
+      },
+      {
+        "fg": "text",
+        "bg": "surface",
+        "ratio": 10.964
+      },
+      {
+        "fg": "text",
+        "bg": "selection",
+        "ratio": 9.247
+      },
+      {
+        "fg": "text",
+        "bg": "addedBg",
+        "ratio": 11.023
+      },
+      {
+        "fg": "text",
+        "bg": "removedBg",
+        "ratio": 10.765
+      },
+      {
+        "fg": "text",
+        "bg": "addedWord",
+        "ratio": 9.017
+      },
+      {
+        "fg": "text",
+        "bg": "removedWord",
+        "ratio": 8.757
+      },
+      {
+        "fg": "secondary",
+        "bg": "canvas",
+        "ratio": 7.24
+      },
+      {
+        "fg": "secondary",
+        "bg": "surface",
+        "ratio": 6.472
+      },
+      {
+        "fg": "secondary",
+        "bg": "selection",
+        "ratio": 5.459
+      },
+      {
+        "fg": "secondary",
+        "bg": "addedBg",
+        "ratio": 6.507
+      },
+      {
+        "fg": "secondary",
+        "bg": "removedBg",
+        "ratio": 6.354
+      },
+      {
+        "fg": "secondary",
+        "bg": "addedWord",
+        "ratio": 5.323
+      },
+      {
+        "fg": "secondary",
+        "bg": "removedWord",
+        "ratio": 5.169
+      },
+      {
+        "fg": "muted",
+        "bg": "canvas",
+        "ratio": 6.384
+      },
+      {
+        "fg": "muted",
+        "bg": "surface",
+        "ratio": 5.706
+      },
+      {
+        "fg": "muted",
+        "bg": "selection",
+        "ratio": 4.813
+      },
+      {
+        "fg": "muted",
+        "bg": "addedBg",
+        "ratio": 5.737
+      },
+      {
+        "fg": "muted",
+        "bg": "removedBg",
+        "ratio": 5.603
+      },
+      {
+        "fg": "muted",
+        "bg": "addedWord",
+        "ratio": 4.693
+      },
+      {
+        "fg": "muted",
+        "bg": "removedWord",
+        "ratio": 4.558
+      },
+      {
+        "fg": "blue",
+        "bg": "canvas",
+        "ratio": 6.923
+      },
+      {
+        "fg": "blue",
+        "bg": "surface",
+        "ratio": 6.188
+      },
+      {
+        "fg": "blue",
+        "bg": "selection",
+        "ratio": 5.219
+      },
+      {
+        "fg": "blue",
+        "bg": "addedBg",
+        "ratio": 6.221
+      },
+      {
+        "fg": "blue",
+        "bg": "removedBg",
+        "ratio": 6.076
+      },
+      {
+        "fg": "blue",
+        "bg": "addedWord",
+        "ratio": 5.089
+      },
+      {
+        "fg": "blue",
+        "bg": "removedWord",
+        "ratio": 4.943
+      },
+      {
+        "fg": "green",
+        "bg": "canvas",
+        "ratio": 6.713
+      },
+      {
+        "fg": "green",
+        "bg": "surface",
+        "ratio": 6.001
+      },
+      {
+        "fg": "green",
+        "bg": "selection",
+        "ratio": 5.061
+      },
+      {
+        "fg": "green",
+        "bg": "addedBg",
+        "ratio": 6.033
+      },
+      {
+        "fg": "green",
+        "bg": "removedBg",
+        "ratio": 5.892
+      },
+      {
+        "fg": "green",
+        "bg": "addedWord",
+        "ratio": 4.935
+      },
+      {
+        "fg": "green",
+        "bg": "removedWord",
+        "ratio": 4.793
+      },
+      {
+        "fg": "amber",
+        "bg": "canvas",
+        "ratio": 7.077
+      },
+      {
+        "fg": "amber",
+        "bg": "surface",
+        "ratio": 6.326
+      },
+      {
+        "fg": "amber",
+        "bg": "selection",
+        "ratio": 5.336
+      },
+      {
+        "fg": "amber",
+        "bg": "addedBg",
+        "ratio": 6.36
+      },
+      {
+        "fg": "amber",
+        "bg": "removedBg",
+        "ratio": 6.211
+      },
+      {
+        "fg": "amber",
+        "bg": "addedWord",
+        "ratio": 5.203
+      },
+      {
+        "fg": "amber",
+        "bg": "removedWord",
+        "ratio": 5.053
+      },
+      {
+        "fg": "red",
+        "bg": "canvas",
+        "ratio": 7.43
+      },
+      {
+        "fg": "red",
+        "bg": "surface",
+        "ratio": 6.642
+      },
+      {
+        "fg": "red",
+        "bg": "selection",
+        "ratio": 5.602
+      },
+      {
+        "fg": "red",
+        "bg": "addedBg",
+        "ratio": 6.677
+      },
+      {
+        "fg": "red",
+        "bg": "removedBg",
+        "ratio": 6.521
+      },
+      {
+        "fg": "red",
+        "bg": "addedWord",
+        "ratio": 5.462
+      },
+      {
+        "fg": "red",
+        "bg": "removedWord",
+        "ratio": 5.305
+      },
+      {
+        "fg": "purple",
+        "bg": "canvas",
+        "ratio": 7.306
+      },
+      {
+        "fg": "purple",
+        "bg": "surface",
+        "ratio": 6.531
+      },
+      {
+        "fg": "purple",
+        "bg": "selection",
+        "ratio": 5.508
+      },
+      {
+        "fg": "purple",
+        "bg": "addedBg",
+        "ratio": 6.566
+      },
+      {
+        "fg": "purple",
+        "bg": "removedBg",
+        "ratio": 6.412
+      },
+      {
+        "fg": "purple",
+        "bg": "addedWord",
+        "ratio": 5.371
+      },
+      {
+        "fg": "purple",
+        "bg": "removedWord",
+        "ratio": 5.216
+      },
+      {
+        "fg": "teal",
+        "bg": "canvas",
+        "ratio": 6.737
+      },
+      {
+        "fg": "teal",
+        "bg": "surface",
+        "ratio": 6.022
+      },
+      {
+        "fg": "teal",
+        "bg": "selection",
+        "ratio": 5.079
+      },
+      {
+        "fg": "teal",
+        "bg": "addedBg",
+        "ratio": 6.055
+      },
+      {
+        "fg": "teal",
+        "bg": "removedBg",
+        "ratio": 5.913
+      },
+      {
+        "fg": "teal",
+        "bg": "addedWord",
+        "ratio": 4.953
+      },
+      {
+        "fg": "teal",
+        "bg": "removedWord",
+        "ratio": 4.81
+      },
+      {
+        "fg": "accent",
+        "bg": "canvas",
+        "ratio": 7.238
+      },
+      {
+        "fg": "accent",
+        "bg": "surface",
+        "ratio": 6.47
+      },
+      {
+        "fg": "accent",
+        "bg": "selection",
+        "ratio": 5.457
+      },
+      {
+        "fg": "accent",
+        "bg": "addedBg",
+        "ratio": 6.505
+      },
+      {
+        "fg": "accent",
+        "bg": "removedBg",
+        "ratio": 6.353
+      },
+      {
+        "fg": "accent",
+        "bg": "addedWord",
+        "ratio": 5.321
+      },
+      {
+        "fg": "accent",
+        "bg": "removedWord",
+        "ratio": 5.168
+      }
+    ],
+    "minContrast": 4.558,
+    "borderContrast": 3.26
+  },
+  {
+    "name": "Matcha Milk",
+    "tokens": {
+      "canvas": "#edf7e0",
+      "surface": "#e0ebd0",
+      "selection": "#ccdbb6",
+      "text": "#2b3022",
+      "secondary": "#4c5342",
+      "muted": "#555b4c",
+      "border": "#828a76",
+      "blue": "#09597d",
+      "green": "#325f34",
+      "amber": "#6e4b10",
+      "red": "#883327",
+      "purple": "#66436e",
+      "teal": "#165f58",
+      "accent": "#78431b",
+      "addedBg": "#d8edd8",
+      "removedBg": "#fdded9",
+      "addedWord": "#bddabd",
+      "removedWord": "#f0c6be"
+    },
+    "checks": [
+      {
+        "fg": "text",
+        "bg": "canvas",
+        "ratio": 12.257
+      },
+      {
+        "fg": "text",
+        "bg": "surface",
+        "ratio": 10.954
+      },
+      {
+        "fg": "text",
+        "bg": "selection",
+        "ratio": 9.283
+      },
+      {
+        "fg": "text",
+        "bg": "addedBg",
+        "ratio": 10.994
+      },
+      {
+        "fg": "text",
+        "bg": "removedBg",
+        "ratio": 10.737
+      },
+      {
+        "fg": "text",
+        "bg": "addedWord",
+        "ratio": 8.993
+      },
+      {
+        "fg": "text",
+        "bg": "removedWord",
+        "ratio": 8.734
+      },
+      {
+        "fg": "secondary",
+        "bg": "canvas",
+        "ratio": 7.236
+      },
+      {
+        "fg": "secondary",
+        "bg": "surface",
+        "ratio": 6.467
+      },
+      {
+        "fg": "secondary",
+        "bg": "selection",
+        "ratio": 5.48
+      },
+      {
+        "fg": "secondary",
+        "bg": "addedBg",
+        "ratio": 6.49
+      },
+      {
+        "fg": "secondary",
+        "bg": "removedBg",
+        "ratio": 6.338
+      },
+      {
+        "fg": "secondary",
+        "bg": "addedWord",
+        "ratio": 5.309
+      },
+      {
+        "fg": "secondary",
+        "bg": "removedWord",
+        "ratio": 5.156
+      },
+      {
+        "fg": "muted",
+        "bg": "canvas",
+        "ratio": 6.355
+      },
+      {
+        "fg": "muted",
+        "bg": "surface",
+        "ratio": 5.679
+      },
+      {
+        "fg": "muted",
+        "bg": "selection",
+        "ratio": 4.813
+      },
+      {
+        "fg": "muted",
+        "bg": "addedBg",
+        "ratio": 5.7
+      },
+      {
+        "fg": "muted",
+        "bg": "removedBg",
+        "ratio": 5.566
+      },
+      {
+        "fg": "muted",
+        "bg": "addedWord",
+        "ratio": 4.663
+      },
+      {
+        "fg": "muted",
+        "bg": "removedWord",
+        "ratio": 4.528
+      },
+      {
+        "fg": "blue",
+        "bg": "canvas",
+        "ratio": 6.936
+      },
+      {
+        "fg": "blue",
+        "bg": "surface",
+        "ratio": 6.199
+      },
+      {
+        "fg": "blue",
+        "bg": "selection",
+        "ratio": 5.253
+      },
+      {
+        "fg": "blue",
+        "bg": "addedBg",
+        "ratio": 6.221
+      },
+      {
+        "fg": "blue",
+        "bg": "removedBg",
+        "ratio": 6.076
+      },
+      {
+        "fg": "blue",
+        "bg": "addedWord",
+        "ratio": 5.089
+      },
+      {
+        "fg": "blue",
+        "bg": "removedWord",
+        "ratio": 4.943
+      },
+      {
+        "fg": "green",
+        "bg": "canvas",
+        "ratio": 6.726
+      },
+      {
+        "fg": "green",
+        "bg": "surface",
+        "ratio": 6.011
+      },
+      {
+        "fg": "green",
+        "bg": "selection",
+        "ratio": 5.094
+      },
+      {
+        "fg": "green",
+        "bg": "addedBg",
+        "ratio": 6.033
+      },
+      {
+        "fg": "green",
+        "bg": "removedBg",
+        "ratio": 5.892
+      },
+      {
+        "fg": "green",
+        "bg": "addedWord",
+        "ratio": 4.935
+      },
+      {
+        "fg": "green",
+        "bg": "removedWord",
+        "ratio": 4.793
+      },
+      {
+        "fg": "amber",
+        "bg": "canvas",
+        "ratio": 7.091
+      },
+      {
+        "fg": "amber",
+        "bg": "surface",
+        "ratio": 6.337
+      },
+      {
+        "fg": "amber",
+        "bg": "selection",
+        "ratio": 5.37
+      },
+      {
+        "fg": "amber",
+        "bg": "addedBg",
+        "ratio": 6.36
+      },
+      {
+        "fg": "amber",
+        "bg": "removedBg",
+        "ratio": 6.211
+      },
+      {
+        "fg": "amber",
+        "bg": "addedWord",
+        "ratio": 5.203
+      },
+      {
+        "fg": "amber",
+        "bg": "removedWord",
+        "ratio": 5.053
+      },
+      {
+        "fg": "red",
+        "bg": "canvas",
+        "ratio": 7.445
+      },
+      {
+        "fg": "red",
+        "bg": "surface",
+        "ratio": 6.653
+      },
+      {
+        "fg": "red",
+        "bg": "selection",
+        "ratio": 5.638
+      },
+      {
+        "fg": "red",
+        "bg": "addedBg",
+        "ratio": 6.677
+      },
+      {
+        "fg": "red",
+        "bg": "removedBg",
+        "ratio": 6.521
+      },
+      {
+        "fg": "red",
+        "bg": "addedWord",
+        "ratio": 5.462
+      },
+      {
+        "fg": "red",
+        "bg": "removedWord",
+        "ratio": 5.305
+      },
+      {
+        "fg": "purple",
+        "bg": "canvas",
+        "ratio": 7.32
+      },
+      {
+        "fg": "purple",
+        "bg": "surface",
+        "ratio": 6.542
+      },
+      {
+        "fg": "purple",
+        "bg": "selection",
+        "ratio": 5.544
+      },
+      {
+        "fg": "purple",
+        "bg": "addedBg",
+        "ratio": 6.566
+      },
+      {
+        "fg": "purple",
+        "bg": "removedBg",
+        "ratio": 6.412
+      },
+      {
+        "fg": "purple",
+        "bg": "addedWord",
+        "ratio": 5.371
+      },
+      {
+        "fg": "purple",
+        "bg": "removedWord",
+        "ratio": 5.216
+      },
+      {
+        "fg": "teal",
+        "bg": "canvas",
+        "ratio": 6.75
+      },
+      {
+        "fg": "teal",
+        "bg": "surface",
+        "ratio": 6.033
+      },
+      {
+        "fg": "teal",
+        "bg": "selection",
+        "ratio": 5.112
+      },
+      {
+        "fg": "teal",
+        "bg": "addedBg",
+        "ratio": 6.055
+      },
+      {
+        "fg": "teal",
+        "bg": "removedBg",
+        "ratio": 5.913
+      },
+      {
+        "fg": "teal",
+        "bg": "addedWord",
+        "ratio": 4.953
+      },
+      {
+        "fg": "teal",
+        "bg": "removedWord",
+        "ratio": 4.81
+      },
+      {
+        "fg": "accent",
+        "bg": "canvas",
+        "ratio": 7.252
+      },
+      {
+        "fg": "accent",
+        "bg": "surface",
+        "ratio": 6.481
+      },
+      {
+        "fg": "accent",
+        "bg": "selection",
+        "ratio": 5.493
+      },
+      {
+        "fg": "accent",
+        "bg": "addedBg",
+        "ratio": 6.505
+      },
+      {
+        "fg": "accent",
+        "bg": "removedBg",
+        "ratio": 6.353
+      },
+      {
+        "fg": "accent",
+        "bg": "addedWord",
+        "ratio": 5.321
+      },
+      {
+        "fg": "accent",
+        "bg": "removedWord",
+        "ratio": 5.168
+      }
+    ],
+    "minContrast": 4.528,
+    "borderContrast": 3.247
+  }
+]

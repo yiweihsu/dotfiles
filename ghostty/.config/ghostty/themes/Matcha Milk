@@ -1,0 +1,28 @@
+# Matcha Milk / generated from design-system/build.py
+# Background L=.962; ink L=.30/.43/.46; accents L=.44.
+background = #edf7e0
+foreground = #2b3022
+selection-background = #ccdbb6
+selection-foreground = #2b3022
+cursor-color = #78431b
+cursor-text = #edf7e0
+split-divider-color = #828a76
+# Contrast is checked offline; avoid glass/min-contrast interaction in 1.3.1.
+minimum-contrast = 1
+faint-opacity = 1
+palette = 0=#2b3022
+palette = 1=#883327
+palette = 2=#325f34
+palette = 3=#6e4b10
+palette = 4=#09597d
+palette = 5=#66436e
+palette = 6=#165f58
+palette = 7=#e0ebd0
+palette = 8=#555b4c
+palette = 9=#883327
+palette = 10=#325f34
+palette = 11=#6e4b10
+palette = 12=#09597d
+palette = 13=#66436e
+palette = 14=#165f58
+palette = 15=#edf7e0

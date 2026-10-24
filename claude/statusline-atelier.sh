@@ -18,12 +18,13 @@ case "$cwd" in
   "$HOME"/*) cwd="~/${cwd#"$HOME"/}" ;;
 esac
 if [ "${#cwd}" -gt 36 ]; then cwd="…/${cwd##*/}"; fi
+# ANSI palette slots, so colors follow the active Ghostty theme (light or dark).
 reset=$'\033[0m'
-ink=$'\033[38;2;222;219;211m'
-muted=$'\033[38;2;146;157;155m'
-accent=$'\033[38;2;165;185;161m'
-if [ "$used" -ge 85 ]; then accent=$'\033[38;2;207;139;131m'
-elif [ "$used" -ge 65 ]; then accent=$'\033[38;2;200;179;138m'; fi
+ink=$'\033[39m'      # default foreground
+muted=$'\033[90m'    # ANSI 8
+accent=$'\033[35m'   # ANSI 5
+if [ "$used" -ge 85 ]; then accent=$'\033[31m'
+elif [ "$used" -ge 65 ]; then accent=$'\033[33m'; fi
 printf '%s%s%s  ·  %s%s' "$ink" "$model" "$muted" "$cwd" "$reset"
 if [ "$used" -ge 0 ]; then
   [ "$used" -le 100 ] || used=100
