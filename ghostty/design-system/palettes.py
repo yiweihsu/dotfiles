@@ -1,4 +1,12 @@
-import json, sys
+#!/usr/bin/env python3
+"""Terminal themes: one palette drives Ghostty, Claude Code and Codex.
+
+  term-theme list                   themes and which one is active
+  term-theme check [slug]           WCAG contrast report (all text >= 4.5:1)
+  term-theme apply <slug> [--dry-run]
+"""
+import argparse, datetime, difflib, json, re, shutil, subprocess, sys, tomllib
+from pathlib import Path
 def lum(h):
     h=h.lstrip('#'); c=[int(h[i:i+2],16)/255 for i in (0,2,4)]
     c=[x/12.92 if x<=0.03928 else ((x+0.055)/1.055)**2.4 for x in c]
@@ -103,19 +111,133 @@ def claude(t):
       briefLabelYou=t["sky"], briefLabelClaude=t.get("brand",t["hojicha"]))
     return {"name":t["name"],"base":t["base"],"overrides":o}
 
-ok=True
-for slug,t in T.items():
-    g,pal=ghostty(t); open(f"{slug}.ghostty","w").write(g)
-    json.dump(claude(t),open(f"{slug}.json","w"),indent=2)
-    print(f"== {t['name']}")
+
+# Exploration drafts from 2026-10-24: readable, but not yet at Ube Milk quality.
+DRAFTS = {"oat-matcha","night-matcha","forest-matcha","koicha","urayanagi","yanagizome","ube"}
+
+HOME = Path.home()
+GHOSTTY_BIN = "/Applications/Ghostty.app/Contents/MacOS/ghostty"
+GHOSTTY_CFG = (HOME/".config/ghostty/config").resolve()
+CLAUDE_SETTINGS = HOME/".claude/settings.json"
+CLAUDE_THEMES = HOME/".claude/themes"
+CODEX_CFG = HOME/".codex/config.toml"
+CODEX_THEME = "base16-256"  # Codex syntax colors follow the Ghostty ANSI palette.
+BACKUPS = HOME/".local/state/ghostty-themes"
+BEGIN = "# >>> theme (managed by design-system/palettes.py; switch with `term-theme apply <slug>`) >>>"
+END = "# <<< theme (managed by design-system/palettes.py) <<<"
+
+def contrast_report(slug, t, verbose=True):
+    _, pal = ghostty(t); low = []
     for fg in ["text","muted","matcha","sky","hojicha","red","amber","plum","teal"]:
         for bgk in ["bg","surface","addbg","rmbg","selection"]:
-            r=cr(t[fg],t[bgk]); need=4.5
-            flag="" if r>=need else "  <-- LOW"
-            if flag: ok=False
-            if bgk=="bg" or flag: print(f"  {fg:8} on {bgk:9} {r:5.2f}{flag}")
-    print(f"  faint    on bg        {cr(t['faint'],t['bg']):5.2f} (hints, >=3 target)")
-    print(f"  ansi8    on bg        {cr(pal[8],t['bg']):5.2f}")
-    print(f"  ansi7    on bg        {cr(pal[7],t['bg']):5.2f}")
-    print(f"  border   on bg        {cr(t['border'],t['bg']):5.2f} (non-text)")
-print("ALL TEXT >=4.5" if ok else "SOME LOW")
+            r = cr(t[fg], t[bgk])
+            if r < 4.5: low.append(f"{fg} on {bgk} {r:.2f}")
+    if verbose:
+        print(f"== {slug} ({t['name']}, {t['base']})")
+        print(f"  text {cr(t['text'],t['bg']):.2f}  muted {cr(t['muted'],t['bg']):.2f}  ansi8 {cr(pal[8],t['bg']):.2f}  faint {cr(t['faint'],t['bg']):.2f}")
+        for x in low: print(f"  LOW  {x}")
+        print("  ok" if not low else f"  {len(low)} pair(s) below 4.5:1")
+    return not low
+
+def ghostty_block(t):
+    light = t["base"] == "light"
+    lines = [BEGIN, f"# {t['name']}: generated palette, text contrast >= 4.5:1.", ghostty(t)[0].rstrip("\n")]
+    if light:
+        lines += ["# Light theme: no native glass; Ghostty 1.3.1 glass + minimum-contrast turns dark text white.",
+                  "background-opacity = 1", "background-blur = false"]
+    else:
+        lines += ["background-opacity = 0.97", "background-blur = macos-glass-regular"]
+    lines += ["minimum-contrast = 1", "faint-opacity = 1", END]
+    return "\n".join(lines)
+
+def new_ghostty_cfg(text, t):
+    if text.count(BEGIN) != 1 or text.count(END) != 1:
+        sys.exit(f"Ghostty config has no managed theme block: {GHOSTTY_CFG}")
+    a = text.index(BEGIN); b = text.index(END) + len(END)
+    return text[:a] + ghostty_block(t) + text[b:]
+
+def new_claude_settings(text, slug):
+    pat = r'("theme"\s*:\s*)"[^"]*"'
+    if len(re.findall(pat, text)) != 1: sys.exit('Expected exactly one "theme" key in Claude settings.json')
+    out = re.sub(pat, lambda m: f'{m.group(1)}"custom:{slug}"', text)
+    json.loads(out); return out
+
+def new_codex_cfg(text):
+    m = re.search(r'(?m)^\[tui\]\s*$', text)
+    if not m: sys.exit("No [tui] table in Codex config.toml")
+    nxt = re.search(r'(?m)^\[', text[m.end():])
+    end = m.end() + (nxt.start() if nxt else len(text[m.end():]))
+    sec = text[m.end():end]
+    if re.search(r'(?m)^theme\s*=', sec):
+        sec = re.sub(r'(?m)^theme\s*=.*$', f'theme = "{CODEX_THEME}"', sec, count=1)
+    else:
+        sec = f'\ntheme = "{CODEX_THEME}"' + sec
+    out = text[:m.end()] + sec + text[end:]
+    if tomllib.loads(out)["tui"]["theme"] != CODEX_THEME: sys.exit("Codex config readback failed")
+    return out
+
+def active():
+    try: return json.loads(CLAUDE_SETTINGS.read_text()).get("theme","").removeprefix("custom:")
+    except Exception: return ""
+
+def apply(slug, dry):
+    if slug not in T: sys.exit(f"Unknown theme '{slug}'. Try: term-theme list")
+    t = T[slug]
+    if not contrast_report(slug, t, verbose=False):
+        contrast_report(slug, t); sys.exit("Refusing to apply: contrast check failed.")
+    files = {GHOSTTY_CFG: new_ghostty_cfg, CLAUDE_SETTINGS: None, CODEX_CFG: None}
+    old = {f: f.read_text() for f in files}
+    new = {GHOSTTY_CFG: new_ghostty_cfg(old[GHOSTTY_CFG], t),
+           CLAUDE_SETTINGS: new_claude_settings(old[CLAUDE_SETTINGS], slug),
+           CODEX_CFG: new_codex_cfg(old[CODEX_CFG])}
+    theme_json = json.dumps(claude(t), indent=2, ensure_ascii=False) + "\n"
+    if dry:
+        for f in files:
+            d = list(difflib.unified_diff(old[f].splitlines(), new[f].splitlines(), str(f), str(f), lineterm="", n=1))
+            print("\n".join(d) if d else f"(unchanged) {f}")
+        print(f"(would write) {CLAUDE_THEMES/(slug+'.json')}")
+        return
+    backup = BACKUPS/datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+    backup.mkdir(parents=True)
+    for f in files: shutil.copy2(f, backup/f.name)
+    CLAUDE_THEMES.mkdir(exist_ok=True)
+    (CLAUDE_THEMES/f"{slug}.json").write_text(theme_json)
+    for f in files: f.write_text(new[f])
+    v = subprocess.run([GHOSTTY_BIN, "+validate-config"], capture_output=True, text=True)
+    if v.returncode != 0:
+        for f in files: shutil.copy2(backup/f.name, f)
+        sys.exit(f"Ghostty rejected the config, restored from {backup}:\n{v.stdout}{v.stderr}")
+    r = subprocess.run(["osascript", "-e", 'tell application "Ghostty"\nif (count of terminals) is 0 then return "NO_TERMINALS"\nreturn perform action "reload_config" on first terminal\nend tell'], capture_output=True, text=True)
+    shown = subprocess.run([GHOSTTY_BIN, "+show-config"], capture_output=True, text=True).stdout
+    bg = re.search(r'(?m)^background = (\S+)', shown)
+    receipt = {"theme": slug, "ghosttyBackground": bg.group(1) if bg else None,
+               "claudeTheme": json.loads(CLAUDE_SETTINGS.read_text())["theme"],
+               "codexTheme": tomllib.loads(CODEX_CFG.read_text())["tui"]["theme"],
+               "ghosttyReload": (r.stdout or r.stderr).strip(), "backup": str(backup)}
+    (backup/"receipt.json").write_text(json.dumps(receipt, indent=2, ensure_ascii=False) + "\n")
+    ok = receipt["ghosttyBackground"] == t["bg"] and receipt["claudeTheme"] == f"custom:{slug}" and receipt["codexTheme"] == CODEX_THEME
+    print(json.dumps(receipt, indent=2, ensure_ascii=False))
+    print(f"\n{'Applied' if ok else 'Applied with readback mismatch'}: {t['name']}. "
+          "Running sessions: Claude Code /theme -> pick it; restart Codex (it detects the background at startup).")
+    if not ok: sys.exit(1)
+
+def main():
+    ap = argparse.ArgumentParser(prog="term-theme", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("list")
+    c = sub.add_parser("check"); c.add_argument("slug", nargs="?")
+    a = sub.add_parser("apply"); a.add_argument("slug"); a.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+    if args.cmd == "list":
+        cur = active()
+        for slug, t in T.items():
+            print(f"{'*' if slug == cur else ' '} {slug:14} {t['name']:18} {t['base']:5} bg {t['bg']}{'  (draft)' if slug in DRAFTS else ''}")
+    elif args.cmd == "check":
+        slugs = [args.slug] if args.slug else list(T)
+        good = all([contrast_report(s, T[s]) for s in slugs])
+        sys.exit(0 if good else 1)
+    else:
+        apply(args.slug, args.dry_run)
+
+if __name__ == "__main__":
+    main()
