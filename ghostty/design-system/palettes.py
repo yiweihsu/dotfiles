@@ -4,6 +4,7 @@
   term-theme list                   themes and which one is active
   term-theme check [slug]           WCAG contrast report (all text >= 4.5:1)
   term-theme apply <slug> [--dry-run]
+  term-theme preview <slug>...       side-by-side palette cards (PNG), no terminal windows
 """
 import argparse, datetime, difflib, json, re, shutil, subprocess, sys, tomllib
 from pathlib import Path
@@ -80,6 +81,16 @@ T = {
    addbg="#dcecd3", rmbg="#f9dde5", addw="#c2dcb2", rmw="#f0c0cf",
    cursor="#aa77ff", brand="#6b3fc4", pborder="#aa77ff",
    ansi8="#685e80", ansi15="#3e3550", ansi_magenta="#6b3fc4"),
+ # Matcha latte: Ube Milk's recipe in a warm matcha hue. 苔 brand, 松葉 success,
+ # 柳染 #91ad70 for non-text accents only, ube purple as the complementary accent.
+ "matcha-latte": dict(name="Matcha Latte", base="light",
+   bg="#f1f2e1", surface="#e6e9cf", surface2="#dce2c2", selection="#dbe2bc",
+   text="#272c1b", muted="#555c43", faint="#757c61", border="#bcc79f",
+   matcha="#33622a", sky="#1d5c92", hojicha="#8a421d", red="#a42d3c",
+   amber="#6a4c00", plum="#6b3fc4", teal="#145f5a",
+   addbg="#dae9c6", rmbg="#f6ddd2", addw="#bfd9a3", rmw="#efc1b4",
+   cursor="#91ad70", brand="#576313", pborder="#91ad70",
+   ansi8="#5f6750", ansi15="#363d2a", ansi_magenta="#576313"),
 }
 
 def ghostty(t):
@@ -221,12 +232,44 @@ def apply(slug, dry):
           "Running sessions: Claude Code /theme -> pick it; restart Codex (it detects the background at startup).")
     if not ok: sys.exit(1)
 
+def card(t, W=1100, H=760):
+    from PIL import Image, ImageDraw, ImageFont
+    font = lambda n: ImageFont.truetype(str(HOME/"Library/Fonts/Sarasa-SuperTTC.ttc"), n, index=0)
+    brand = t.get("brand", t["hojicha"]); f = font(26); im = Image.new("RGB", (W, H), t["bg"]); d = ImageDraw.Draw(im)
+    d.text((30, 18), t["name"], fill=brand, font=font(34)); y = 80
+    d.rectangle([20, y-10, W-20, y+44], fill=t["surface"]); d.text((40, y), "› 幫我把 greet() 加上 name 參數", fill=t["text"], font=f); y += 80
+    d.text((30, y), "●", fill=brand, font=f); d.text((60, y), "現在修改 ", fill=t["text"], font=f)
+    d.text((60+f.getlength("現在修改 "), y), "greet()", fill=t["sky"], font=f); y += 52
+    d.text((30, y), "● Update(demo.py)", fill=t["matcha"], font=f); y += 48
+    d.rectangle([60, y-6, W-40, y+36], fill=t["rmbg"]); d.text((80, y), "- def greet():", fill=t["text"], font=f); y += 42
+    d.rectangle([60, y-6, W-40, y+36], fill=t["addbg"]); d.text((80, y), '+ def greet(name: str = "世界") -> None:', fill=t["text"], font=f); y += 62
+    for k, lab in [("muted", "次要文字 Read 1 file"), ("hojicha", "焙茶 · 強調"), ("amber", "警告 · auto mode"),
+                   ("red", "錯誤 · failed"), ("plum", "紫 · merged"), ("teal", "青磁 · plan mode")]:
+        d.text((40, y), lab, fill=t[k], font=f); y += 42
+    d.line([20, y+6, W-20, y+6], fill=t.get("pborder", t["border"]), width=3)
+    d.text((40, y+18), "›", fill=brand, font=f); d.rectangle([66, y+20, 80, y+50], fill=t["cursor"])
+    d.text((100, y+18), "~/Workspace", fill=t["text"], font=font(26)); x = 30
+    for k in ["bg", "surface", "text", "muted", "matcha", "sky", "hojicha", "amber", "red", "plum", "teal"]:
+        d.rectangle([x, H-62, x+52, H-14], fill=t[k], outline=t["border"]); x += 58
+    d.rectangle([x, H-62, x+52, H-14], fill=brand, outline=t["border"]); x += 58
+    d.rectangle([x, H-62, x+52, H-14], fill=t["cursor"], outline=t["border"])
+    return im
+
+def preview(slugs, out):
+    from PIL import Image
+    cards = [card(T[s]) for s in slugs]; pad = 24
+    sheet = Image.new("RGB", (sum(c.width for c in cards) + pad*(len(cards)+1), cards[0].height + 2*pad), "#d9d6cf")
+    x = pad
+    for c in cards: sheet.paste(c, (x, pad)); x += c.width + pad
+    sheet.save(out); subprocess.run(["open", str(out)]); print(out)
+
 def main():
     ap = argparse.ArgumentParser(prog="term-theme", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list")
     c = sub.add_parser("check"); c.add_argument("slug", nargs="?")
     a = sub.add_parser("apply"); a.add_argument("slug"); a.add_argument("--dry-run", action="store_true")
+    pv = sub.add_parser("preview"); pv.add_argument("slugs", nargs="+"); pv.add_argument("-o", "--out", default=str(BACKUPS.parent/"term-theme-preview.png"))
     args = ap.parse_args()
     if args.cmd == "list":
         cur = active()
@@ -236,6 +279,10 @@ def main():
         slugs = [args.slug] if args.slug else list(T)
         good = all([contrast_report(s, T[s]) for s in slugs])
         sys.exit(0 if good else 1)
+    elif args.cmd == "preview":
+        unknown = [x for x in args.slugs if x not in T]
+        if unknown: sys.exit(f"Unknown theme(s): {', '.join(unknown)}")
+        preview(args.slugs, Path(args.out))
     else:
         apply(args.slug, args.dry_run)
 
