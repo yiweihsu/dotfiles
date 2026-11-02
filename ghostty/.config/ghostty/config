@@ -139,6 +139,10 @@ mouse-hide-while-typing = true
 
 copy-on-select = true
 
+# Match the physical V key before CJK input-method translation.
+# Send Ctrl+V (SYN) to the CLI so Codex/Claude Code can paste clipboard images.
+keybind = ctrl+KeyV=text:\x16
+
 # --- Miscellaneous ---
 
 confirm-close-surface = true
